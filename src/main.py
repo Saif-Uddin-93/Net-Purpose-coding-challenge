@@ -16,11 +16,32 @@ def get_results(division: list[dict], n: int) -> str | None:
 
     # Sort teams in descending order according to their points.
     sorted_teams = sorted(division, key=lambda t: t["points"], reverse=True)
+    
+    # check if too many scores are equal
+    avg_points = sum([team["points"] for team in division]) / len(division)
+    print(avg_points, division[0]["points"])
+    all_teams_equal_scores = avg_points == division[0]["points"]
+
+    if all_teams_equal_scores:
+        return "All teams have the same score. Cannot promote or relegate any teams."
+
+    top_score = sorted_teams[:n][0]["points"]
+    bottom_score = sorted_teams[-n:][-1]["points"]
+    top_n_with_equal_scores = [team for team in sorted_teams if team["points"] == top_score]
+    bottom_n_with_equal_scores = [team for team in sorted_teams if team["points"] == bottom_score]
+    
+    if max_n < len(top_n_with_equal_scores):
+        return f"Too many teams in the top {n} with the same score to promote"
+
+    if max_n < len(bottom_n_with_equal_scores):
+        return f"Too many teams in the bottom {n} with the same score to relegate"
+
     # promote list gets joined and converted to a string with the first n teams
     promote = "\n".join([team["name"] for team in sorted_teams[:n]])
+
     # relegate list gets joined and converted to a string with the last n teams
     relegate = "\n".join([team["name"] for team in sorted_teams[-n:]])
-
+    
     results_msg = Template("""Promote:
 $promote
 

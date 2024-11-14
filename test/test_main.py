@@ -1,5 +1,6 @@
 from src.main import get_results
 
+
 given_division = [
     {
         "name": "Rockets",
@@ -55,7 +56,35 @@ def test_returns_type_string():
     assert isinstance(result, str)
 
 
-def test_include_teams_with_equal_scores():
+def test_top_teams_with_equal_scores():
+    test_division = [
+        {
+            "name": "Rockets",
+            "points": 77,
+        },
+        {
+            "name": "Cardinals",
+            "points": 77,
+        },
+        {
+            "name": "Bruisers",
+            "points": 77,
+        },
+        {
+            "name": "Renegades",
+            "points": 37,
+        },
+        {
+            "name": "Porpoises",
+            "points": 52,
+        },
+    ]
+    result = get_results(test_division, 2)
+    expected = "Too many teams in the top 2 with the same score to promote"
+    assert result == expected
+
+
+def test_bottom_teams_with_equal_scores():
     test_division = [
         {
             "name": "Rockets",
@@ -75,15 +104,36 @@ def test_include_teams_with_equal_scores():
         },
         {
             "name": "Porpoises",
-            "points": 52,
+            "points": 37,
         },
     ]
     result = get_results(test_division, 2)
-    expected = """Promote:
-Rockets
-Cardinals
+    expected = "Too many teams in the bottom 2 with the same score to relegate"
+    assert result == expected
 
-Relegate:
-Bruisers
-Renegades"""
+def test_all_teams_with_equal_scores():
+    test_division = [
+        {
+            "name": "Rockets",
+            "points": 77,
+        },
+        {
+            "name": "Cardinals",
+            "points": 77,
+        },
+        {
+            "name": "Bruisers",
+            "points": 77,
+        },
+        {
+            "name": "Renegades",
+            "points": 77,
+        },
+        {
+            "name": "Porpoises",
+            "points": 77,
+        },
+    ]
+    result = get_results(test_division, 2)
+    expected = "All teams have the same score. Cannot promote or relegate any teams."
     assert result == expected
