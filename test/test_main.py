@@ -1,3 +1,4 @@
+import pytest
 from src.main import get_results
 
 
@@ -46,8 +47,12 @@ Renegades"""
 
 
 def test_returns_none_if_n_value_too_large():
-    result = get_results(given_division, 3)
-    expected = None
+    with pytest.raises(Exception) as exc_info:
+        get_results(given_division, 3)
+
+    result = str(exc_info.value)
+    expected = "3, is too big. Enter a number that is a maximum of, 2"
+
     assert result == expected
 
 
@@ -79,7 +84,11 @@ def test_top_teams_with_equal_scores():
             "points": 52,
         },
     ]
-    result = get_results(test_division, 2)
+
+    with pytest.raises(Exception) as exc_info:
+        get_results(test_division, 2)
+
+    result = str(exc_info.value)
     expected = "Too many teams in the top 2 with the same score to promote"
     assert result == expected
 
@@ -107,9 +116,15 @@ def test_bottom_teams_with_equal_scores():
             "points": 37,
         },
     ]
-    result = get_results(test_division, 2)
+
+    with pytest.raises(Exception) as exc_info:
+        get_results(test_division, 2)
+
+    result = str(exc_info.value)
     expected = "Too many teams in the bottom 2 with the same score to relegate"
+
     assert result == expected
+
 
 def test_all_teams_with_equal_scores():
     test_division = [
@@ -134,6 +149,12 @@ def test_all_teams_with_equal_scores():
             "points": 77,
         },
     ]
-    result = get_results(test_division, 2)
-    expected = "All teams have the same score. Cannot promote or relegate any teams."
+
+    with pytest.raises(Exception) as exc_info:
+        get_results(test_division, 2)
+
+    result = str(exc_info.value)
+    expected = "All teams have the same score. Cannot promote or \
+relegate any teams."
+
     assert result == expected
