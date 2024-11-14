@@ -16,9 +16,9 @@ def get_results(division: list[dict], n: int) -> str | None:
 
     # Sort teams in descending order according to their points.
     sorted_teams = sorted(division, key=lambda t: t["points"], reverse=True)
-    # promote list gets the first n teams
+    # promote list gets joined and converted to a string with the first n teams
     promote = "\n".join([team["name"] for team in sorted_teams[:n]])
-    # relegate list gets the last n teams
+    # relegate list gets joined and converted to a string with the last n teams
     relegate = "\n".join([team["name"] for team in sorted_teams[-n:]])
 
     results_msg = Template("""Promote:
@@ -32,5 +32,4 @@ $relegate""").substitute({
 
     return results_msg
 
-    # return "Promote:\n" + "\n".join(promote) + "\n\nRelegate:\n" + \
-    #     "\n".join(relegate)
+    # return "Promote:\n" + promote + "\n\nRelegate:\n" + relegate
