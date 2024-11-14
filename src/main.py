@@ -37,13 +37,13 @@ Cannot promote or relegate any teams."
 
     if max_n < len(top_n_equal_scores):
         raise Exception(
-            f"Too many teams in the top {n} \
+            "Too many teams in the top \
 with the same score to promote"
             )
 
     if max_n < len(last_n_equal_scores):
         raise Exception(
-            f"Too many teams in the bottom {n} \
+            "Too many teams in the bottom \
 with the same score to relegate"
             )
 

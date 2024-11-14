@@ -89,7 +89,7 @@ def test_top_teams_with_equal_scores():
         get_results(test_division, 2)
 
     result = str(exc_info.value)
-    expected = "Too many teams in the top 2 with the same score to promote"
+    expected = "Too many teams in the top with the same score to promote"
     assert result == expected
 
 
@@ -121,7 +121,7 @@ def test_bottom_teams_with_equal_scores():
         get_results(test_division, 2)
 
     result = str(exc_info.value)
-    expected = "Too many teams in the bottom 2 with the same score to relegate"
+    expected = "Too many teams in the bottom with the same score to relegate"
 
     assert result == expected
 
