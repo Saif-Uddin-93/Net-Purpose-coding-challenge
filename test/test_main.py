@@ -158,3 +158,38 @@ def test_all_teams_with_equal_scores():
 relegate any teams."
 
     assert result == expected
+
+def test_average_score_77_does_not_raise_exception():
+    test_division = [
+        {
+            "name": "Rockets",
+            "points": 77,
+        },
+        {
+            "name": "Cardinals",
+            "points": 76,
+        },
+        {
+            "name": "Bruisers",
+            "points": 75,
+        },
+        {
+            "name": "Renegades",
+            "points": 78,
+        },
+        {
+            "name": "Porpoises",
+            "points": 79,
+        },
+    ]
+
+    result = get_results(test_division, 2)
+    expected = """Promote:
+Porpoises
+Renegades
+
+Relegate:
+Cardinals
+Bruisers"""
+
+    assert result == expected
