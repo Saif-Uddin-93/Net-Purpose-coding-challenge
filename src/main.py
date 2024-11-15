@@ -17,8 +17,10 @@ def get_results(division: list[dict], n: int) -> str:
             )
 
     # check if too many scores are equal
-    avg_points = sum([team["points"] for team in division]) / len(division)
-    all_teams_equal_scores = avg_points == division[0]["points"]
+    score = division[0]["points"]
+    divisor = len(division)
+    avg = sum([t["points"] for t in division if t["points"] == score]) / divisor
+    all_teams_equal_scores = avg == score
 
     if all_teams_equal_scores:
         raise Exception(
