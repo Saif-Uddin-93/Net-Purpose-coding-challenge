@@ -159,6 +159,7 @@ relegate any teams."
 
     assert result == expected
 
+
 def test_average_score_77_does_not_raise_exception():
     test_division = [
         {
