@@ -1,22 +1,68 @@
-def get_results(division: list[dict], n: int) -> str | None:
+from string import Template
+
+
+def get_results(division: list[dict], n: int) -> str:
     # Your code here
 
     # If n is larger than half the size of the list, then return None.
     # This is to prevent teams appearing in both categories
     max_n = len(division) // 2
-    if n * 2 > len(division):
-        print(f"{n}, is too big. Enter a number that is a maximum of, {max_n}")
-        return
-    elif n<1:
-        print(f"{n}, is too small. Enter a number that is 1 or greater")
-        return
+    if n > max_n:
+        raise Exception(
+            f"{n}, is too big. Enter a number that is a maximum of, {max_n}"
+            )
+    elif n < 1:
+        raise Exception(
+            f"{n}, is too small. Enter a number that is 1 or greater"
+            )
+
+    # check if too many scores are equal
+    score = division[0]["points"]
+    dividend = sum([t["points"] for t in division if t["points"] == score])
+    divisor = len(division)
+    avg = dividend / divisor
+    all_teams_equal_scores = avg == score
+
+    if all_teams_equal_scores:
+        raise Exception(
+            "All teams have the same score. \
+Cannot promote or relegate any teams."
+            )
 
     # Sort teams in descending order according to their points.
     sorted_teams = sorted(division, key=lambda t: t["points"], reverse=True)
-    # promote list gets the first n teams
-    promote = [team["name"] for team in sorted_teams[:n]]
-    # relegate list gets the last n teams
-    relegate = [team["name"] for team in sorted_teams[-n:]]
+    top_teams = sorted_teams[:n]
+    last_teams = sorted_teams[-n:]
+    top = top_teams[0]["points"]
+    last = last_teams[-1]["points"]
+    top_n_equal_scores = [t for t in sorted_teams if t["points"] == top]
+    last_n_equal_scores = [t for t in sorted_teams if t["points"] == last]
 
-    return "Promote:\n" + "\n".join(promote) + "\n\nRelegate:\n" + \
-        "\n".join(relegate)
+    if max_n < len(top_n_equal_scores):
+        raise Exception(
+            "Too many teams in the top \
+with the same score to promote"
+            )
+
+    if max_n < len(last_n_equal_scores):
+        raise Exception(
+            "Too many teams in the bottom \
+with the same score to relegate"
+            )
+
+    # promote list gets joined and converted to a string with the first n teams
+    promote = "\n".join([team["name"] for team in top_teams])
+
+    # relegate list gets joined and converted to a string with the last n teams
+    relegate = "\n".join([team["name"] for team in last_teams])
+
+    results_msg = Template("""Promote:
+$promote
+
+Relegate:
+$relegate""").substitute({
+        "promote": promote,
+        "relegate": relegate
+    })
+
+    return results_msg
